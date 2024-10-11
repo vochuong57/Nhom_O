@@ -6002,6 +6002,7 @@
                     "type": "patreon"
                 }
             ],
+            "abandoned": "php-flasher/flasher-toastr-laravel",
             "time": "2023-01-14T02:38:08+00:00"
         }
     ],

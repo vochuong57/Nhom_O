@@ -17,10 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('user_catalogues')->insert([
+            'name'=>'Quản trị viên',
+        ]);
+
         DB::table('users')->insert([
-            'name'=>'Chuong Vo',
             'email'=>'vochuong57@gmail.com',
             'password'=>Hash::make('123456'),
+            'user_catalogue_id'=>'1'
         ]);
     }
 }
