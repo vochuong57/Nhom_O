@@ -6,6 +6,8 @@
 
 <title>SB Admin 2 - Dashboard</title>
 
+<link href="{{ asset('Backend/css/customsize.css') }}" rel="stylesheet">
+
 @if(isset($config['css'])&& is_array($config['css']))
     @foreach($config['css'] as $key => $val)
         <link href="{{ asset($val) }}" rel="stylesheet">
