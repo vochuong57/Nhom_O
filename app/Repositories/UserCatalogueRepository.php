@@ -30,12 +30,12 @@ class UserCatalogueRepository extends BaseRepository implements UserCatalogueRep
                 $query->where(function ($query) use ($condition) {
                     $query->where('name', 'LIKE', '%' . $condition['keyword'] . '%')
                         ->orWhere('description', 'LIKE', '%' . $condition['keyword'] . '%');
-                       
                 });
             }
-            
-           
         });
+        if (isset($condition['publish'])) {
+            $query->where('publish', '=', $condition['publish']);
+        }
         if(isset($relations) && !empty($relations)) {
             foreach($relations as $relation) {
                 $query->withCount($relation);

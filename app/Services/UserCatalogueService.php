@@ -28,6 +28,10 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     public function paginate($request){
         $condition['keyword']=addslashes($request->input('keyword'));
         $perpage=$request->integer('perpage', 20);
+        $condition['publish']=$request->input('publish');
+        if ($condition['publish'] == '0') {
+            $condition['publish'] = null;
+        }
         $userCatalogues=$this->userCatalogueRepository->pagination(
             $this->paginateSelect(), 
             $condition, 
@@ -39,5 +43,60 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         );
         return $userCatalogues;
     }
-    
+    public function updateStatus($post=[]){
+        DB::beginTransaction();
+        try{
+            $payload[$post['field']]=(($post['value']==1)?2:1);
+            $user=$this->userCatalogueRepository->update($post['modelId'], $payload);
+            DB::commit();
+            return true;
+        }catch(\Exception $ex){
+            DB::rollBack();
+            echo $ex->getMessage();
+            return false;
+        }
+    }
+    private function paginateSelect(){
+        return [
+            'id','name','description','publish'
+        ];
+    }
+    public function createUserCatalogue($request){
+        DB::beginTransaction();
+        try{
+            $payload = $request->except('_token','send');
+            $userCatalogue=$this->userCatalogueRepository->create($payload);
+            DB::commit();
+            return true;
+        }catch(\Exception $ex){
+            DB::rollBack();
+            echo $ex->getMessage();die();
+            return false;
+        }
+    }
+    public function updateUserCatalogue($id, $request){
+        DB::beginTransaction();
+        try{
+            $payload = $request->except('_token','send');
+            $userCatalogue=$this->userCatalogueRepository->update($id, $payload);
+            DB::commit();
+            return true;
+        }catch(\Exception $ex){
+            DB::rollBack();
+            echo $ex->getMessage();die();
+            return false;
+        }
+    }
+    public function deleteUserCatalogue($id){
+        DB::beginTransaction();
+        try{
+            $userCatalogue=$this->userCatalogueRepository->forceDelete($id);
+            DB::commit();
+            return true;
+        }catch(\Exception $ex){
+            DB::rollBack();
+            echo $ex->getMessage();die();
+            return false;
+        }
+    }
 }

@@ -15,6 +15,7 @@ class UserCatalogue extends Model
     protected $fillable = [
         'name',
         'description',
+        'publish'
     ];
 
     protected $table='user_catalogues';

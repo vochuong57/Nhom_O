@@ -59,7 +59,6 @@ class DashboardController extends Controller
     }
 
     public function update(UpdateUserProfileRequest $request){
-        // dd($request);
         $id = Auth::id();
        
         if($this->userService->updateUser($id, $request)){

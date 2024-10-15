@@ -5,7 +5,7 @@
 <meta name="author" content="">
 
 <title>SB Admin 2 - Dashboard</title>
-
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <link href="{{ asset('Backend/css/customsize.css') }}" rel="stylesheet">
 
 @if(isset($config['css'])&& is_array($config['css']))
