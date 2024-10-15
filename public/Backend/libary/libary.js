@@ -4,6 +4,12 @@
     
     var HT={};
     var _token=$('meta[name="csrf-token"]').attr('content');
+
+    HT.switchery=()=>{
+        $('.js-switch').each(function(){
+            var switchery = new Switchery(this, { color: '#1AB394', size: 'small' });
+        })
+    }
     
     HT.select2=()=>{
         if($('.setupSelect2').length){
@@ -97,6 +103,39 @@
         }
     } 
 
+    HT.changeStatus = () => {
+        if ($('.status').length) {
+            $(document).on('change', '.status', function(){
+                let _this=$(this);
+                let currentValue = _this.val(); 
+                let option={
+                    'value': currentValue,
+                    'modelId': _this.attr('data-modelId'),
+                    'model': _this.attr('data-model'),
+                    'field': _this.attr('data-field'),
+                    '_token': _token
+                }
+                console.log(option)
+                $.ajax({
+                    url: getStatusUrl,
+                    type: 'POST',
+                    data: option,
+                    dataType: 'json',
+                    success: function(res){
+                        console.log(res);
+                        currentValue = currentValue == 1 ? 2 : 1;
+                        _this.val(currentValue);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        console.log('Lỗi: '+jqXHR);
+                        console.log('Lỗi request: '+ textStatus);
+                        console.log('Lỗi nội dung: '+ errorThrown);
+                    }
+                });
+            })  
+        }
+    }
+
     HT.setupDatePicker = () => {
         $('.datepicker input').datetimepicker({
             timepicker: true,
@@ -117,6 +156,8 @@
         HT.checkBoxItem();
         HT.deleteAll();
         HT.setupDatePicker();
+        HT.switchery();
+        HT.changeStatus();
     })
 
 })(jQuery)
