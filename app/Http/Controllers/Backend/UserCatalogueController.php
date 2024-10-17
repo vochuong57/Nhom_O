@@ -40,6 +40,10 @@ class UserCatalogueController extends Controller
         $config['controllerName']="Catalogue";
 
         $userCatalogues = $this->userCatalogueService->paginate($request);
+        
+        foreach ($userCatalogues as $userCatalogue) {
+            $userCatalogue->encrypted_id = $this->encryptId($userCatalogue->id);
+        }
 
         return view('Backend.dashboard.layout', compact('template','config','userCatalogues'));
     }
@@ -72,6 +76,12 @@ class UserCatalogueController extends Controller
 
         $config['method']='edit';
 
+        $id = $this->decryptId($id);
+
+        if (!preg_match('/^[0-9A-Za-z=]+$/', $id)) {
+            return redirect()->route('user.catalogue.index')->withErrors('ID không hợp lệ. Vui lòng sử dụng ID đã mã hóa.');
+        }
+
         $userCatalogue=$this->userCatalogueRepository->findById($id);
 
         return view('Backend.dashboard.layout', compact('template','config','userCatalogue'));
@@ -89,6 +99,12 @@ class UserCatalogueController extends Controller
         $config=$this->configCUD();
 
         $config['seo']=config('apps.UserCatalogue.delete');
+
+        $id = $this->decryptId($id);
+
+        if (!preg_match('/^[0-9A-Za-z=]+$/', $id)) {
+            return redirect()->route('user.catalogue.index')->withErrors('ID không hợp lệ. Vui lòng sử dụng ID đã mã hóa.');
+        }
 
         $userCatalogue=$this->userCatalogueRepository->findById($id);
 

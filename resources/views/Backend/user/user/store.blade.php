@@ -1,4 +1,5 @@
 @include('Backend.dashboard.component.breadcrumb', ['title' =>$config['seo']['title']])
+<!-- từ khóa tìm kiếm/validation/Displaying the Validation Errors -->
 @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -8,8 +9,10 @@
         </ul>
     </div>
 @endif
-
-<form action="{{ route('user.profile.update') }}" method="post" class="box">
+@php
+    $url=($config['method']=='create')?route('user.create'):route('user.update', $user->id)
+@endphp
+<form action="{{ $url }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -39,7 +42,6 @@
                                     class="form-control"
                                     placeholder=""
                                     autocomplete="off"
-                                    disabled
                                     >
                                 </div>
                             </div>
@@ -72,6 +74,8 @@
                                             </option>
                                         @endforeach
                                     </select>
+
+
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -92,25 +96,11 @@
                                 </div>
                             </div>
                         </div>
+                        @if($config['method']=='create')
                         <div class="row mb15">
-                            <div class="col-lg-12">
-                                <div class="form-row">
-                                    <label for="" class="control-label text-left">Mật khẩu cũ: <span class="text-danger">(*)</span></label>
-                                    <input 
-                                    type="password"
-                                    name="oldpassword"
-                                    value=""
-                                    class="form-control"
-                                    placeholder=""
-                                    autocomplete="off"
-                                    >
-                                </div>
-                            </div>
-                        </div>
-                       <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label text-left">Mật khẩu mới: <span class="text-danger">(*)</span></label>
+                                    <label for="" class="control-label text-left">Mật khẩu: <span class="text-danger">(*)</span></label>
                                     <input 
                                     type="password"
                                     name="password"
@@ -135,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+                        @endif
                         <div class="row mb15">
                             <div class="col-lg-12">
                                 <div class="form-row">
