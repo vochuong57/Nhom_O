@@ -48,6 +48,10 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         try{
             $payload[$post['field']]=(($post['value']==1)?2:1);
             $user=$this->userCatalogueRepository->update($post['modelId'], $payload);
+            $condition = [
+                ['user_catalogue_id', '=', [$post['modelId']]]
+            ];
+            $this->userRepository->updateByWhere($condition, $payload);
             DB::commit();
             return true;
         }catch(\Exception $ex){

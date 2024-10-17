@@ -83,9 +83,12 @@ class BaseRepository implements BaseRepositoryInterface
     public function updateByWhere(array $condition=[], array $payload=[]){
         $query = $this->model->newQuery();
         foreach($condition as $key => $val){
-            $query->where($val[0], $val[1], $val[2]);
+            if(is_array($val[2])){
+                $query->whereIn($val[0], $val[2]);
+            } else {
+                $query->where($val[0], $val[1], $val[2]);
+            }
         }
-        //echo $query->toSql(); die();
         return $query->update($payload);
     }
     public function delete(int $id=0){

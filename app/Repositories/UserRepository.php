@@ -40,7 +40,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             }
 
             if (isset($condition['user_catalogue_id'])) {
-                $query->where('tb2.user_catalogue_id', '=', $condition['user_catalogue_id']);
+                $query->where('tb2.user_catalogue_id', '=', $condition['user_catalogue_id'])
+                ->orWhere('users.user_catalogue_id', '=', $condition['user_catalogue_id']);
             }
         })->with('user_catalogues');
         if(isset($relations)&&!empty($relations)){
@@ -49,9 +50,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             }
         }
 
-        if(isset($join)&&is_array($join)&&count($join)){
-            foreach($join as $key =>$val){
-                $query->join($val[0],$val[1],$val[2],$val[3]);
+        if (isset($join) && is_array($join) && count($join)) {
+            foreach ($join as $key => $val) {
+                if (isset($val[4]) && $val[4] == 'left') {
+                    $query->leftJoin($val[0], $val[1], $val[2], $val[3]);
+                } else {
+                    $query->join($val[0], $val[1], $val[2], $val[3]);
+                }
             }
         }
 

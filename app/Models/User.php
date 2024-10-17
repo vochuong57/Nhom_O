@@ -21,6 +21,7 @@ class User extends Authenticatable
         'email',
         'password',
         'user_catalogue_id',
+        'publish'
     ];
 
     /**
