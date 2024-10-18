@@ -21,6 +21,15 @@
 .mt20{
     margin-top: 20px;
 }
+.btn-authorize{
+    width: 133px;
+}
+.btn-addUserCatalogue{
+    width: 241px;
+}
+.input-my-search{
+    width: 275px !important;
+}
 .mt12{
     margin-top: 12px;
 }
