@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
         'App\Repositories\Interfaces\ProvinceRepositoryInterface' => 'App\Repositories\ProvinceRepository',
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
         'App\Repositories\Interfaces\WardRepositoryInterface' => 'App\Repositories\WardRepository',
+
+        'App\Services\Interfaces\PermissionServiceInterface' => 'App\Services\PermissionService',
+        'App\Repositories\Interfaces\PermissionRepositoryInterface' => 'App\Repositories\PermissionRepository',
     ];
     
     /**

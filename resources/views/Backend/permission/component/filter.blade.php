@@ -1,4 +1,4 @@
-<form action="{{ route('user.catalogue.index') }}">
+<form action="{{ route('permission.index') }}">
 <div class="filter-wrapper">
     <div class="uk-flex uk-flex-middle uk-flex-space-between">
         <div class="perpage">
@@ -13,29 +13,17 @@
         </div>
         <div class="action">
             <div class="uk-flex uk-flex-middle">
-                @php
-                    $publish = request('publish') ?: old('publish');
-                @endphp
-                <select name="publish" class="form-control">
-                    @foreach(config('apps.general.publish') as $key => $val)
-                        <option {{ ($publish == $key) ? 'selected' : '' }} value="{{ $key }}">{{ $val }}</option>
-                    @endforeach
-                </select>
-               
+                
                 <div class="uk-search uk-flex uk-flex-middle">
-                    <div class="input-group input-my-search">
+                    <div class="input-group">
                         <input type="text" name="keyword" value="{{ request('keyword') ?: old('keyword') }}" placeholder="Nhập từ khóa bạn muốn tìm kiếm..."
                             class="form-control">
                         <span class="input-group-btn ">
-                            <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm
-                                kiếm</button>
+                            <button type="submit" name="search" value="search" class="btn btn-primary mb0 btn-sm">Tìm kiếm</button>
                         </span>
                     </div>
                 </div>
-                <div class="uk-flex uk-flex-middle">
-                    <a href="{{ route('user.catalogue.permission') }}" class="btn btn-warning btn-authorize"><i class="fa fa-key mr5"></i>Phân quyền</a>
-                    <a href="{{ route('user.catalogue.store') }}" class="btn btn-danger btn-addUserCatalogue"><i class="fa fa-plus mr5"></i>Thêm mới nhóm thành viên</a>
-                </div>
+                <a href="{{ route('permission.store') }}" class="btn btn-danger ml10"><i class="fa fa-plus mr5"></i>Thêm mới quyền</a>
             </div>
         </div>
     </div>

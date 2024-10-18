@@ -60,6 +60,8 @@ class UserController extends Controller
             $user->encrypted_id = $this->encryptId($user->id);
         }
 
+        $this->authorize('modules', 'user.index');
+
         return view('Backend.dashboard.layout', compact('template','config','users','userCatalogues'));
     }
 
@@ -78,6 +80,8 @@ class UserController extends Controller
         ->get();
 
         $provinces=$this->provinceRepository->all();
+
+        $this->authorize('modules', 'user.store');
 
         return view('Backend.dashboard.layout', compact('template','config','userCatalogues', 'provinces'));
     }
@@ -127,6 +131,8 @@ class UserController extends Controller
             return redirect()->route('user.index')->with('error', 'Thành viên '.$userInfo->name.' thuộc nhóm quản trị viên không thể sửa.');
         }
 
+        $this->authorize('modules', 'user.edit');
+
         return view('Backend.dashboard.layout', compact('template','config','user','userCatalogues', 'userInfo', 'provinces'));
     }
     public function update($id, UpdateUserRequest $request){
@@ -160,6 +166,8 @@ class UserController extends Controller
         if ($id == 1) {
             return redirect()->route('user.index')->with('error', 'Thành viên này thuộc nhóm quản trị viên không thể xóa.');
         }
+
+        $this->authorize('modules', 'user.destroy');
 
         return view('Backend.dashboard.layout', compact('template','config','user','userInfo'));
     }

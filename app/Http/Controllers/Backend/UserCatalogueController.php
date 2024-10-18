@@ -9,15 +9,18 @@ use App\Http\Requests\StoreUserCatalogueRequest;
 use App\Http\Requests\UpdateUserCatalogueRequest;
 use App\Http\Requests\DeleteUserCatalogueRequest;
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
+use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepository;
 
 class UserCatalogueController extends Controller
 {
     protected $userCatalogueService;
     protected $userCatalogueRepository;
+    protected $permissionRepository;
 
-    public function __construct(UserCatalogueService $userCatalogueService, UserCatalogueRepository $userCatalogueRepository){
+    public function __construct(UserCatalogueService $userCatalogueService, UserCatalogueRepository $userCatalogueRepository,PermissionRepository $permissionRepository){
         $this->userCatalogueService=$userCatalogueService;
         $this->userCatalogueRepository=$userCatalogueRepository;
+        $this->permissionRepository=$permissionRepository;
     }
     public function index(Request $request){
         $rules = [
@@ -45,6 +48,8 @@ class UserCatalogueController extends Controller
             $userCatalogue->encrypted_id = $this->encryptId($userCatalogue->id);
         }
 
+        $this->authorize('modules', 'user.catalogue.index');
+
         return view('Backend.dashboard.layout', compact('template','config','userCatalogues'));
     }
 
@@ -56,6 +61,8 @@ class UserCatalogueController extends Controller
         $config['seo']=config('apps.UserCatalogue.create');
 
         $config['method']='create';
+
+        $this->authorize('modules', 'user.catalogue.store');
 
         return view('Backend.dashboard.layout', compact('template','config'));
     }
@@ -84,6 +91,8 @@ class UserCatalogueController extends Controller
 
         $userCatalogue=$this->userCatalogueRepository->findById($id);
 
+        $this->authorize('modules', 'user.catalogue.edit');
+
         return view('Backend.dashboard.layout', compact('template','config','userCatalogue'));
     }
     public function update($id, UpdateUserCatalogueRequest $request){
@@ -110,11 +119,9 @@ class UserCatalogueController extends Controller
 
         if ($id == 1) {
             return redirect()->route('user.catalogue.index')->with('error', 'Đây là nhóm quản trị viên không thể xóa.');
-        }elseif($id == 10){
-            return redirect()->route('user.catalogue.index')->with('error', 'Đây là nhóm khách hàng không thể xóa.');
-        }elseif($id == 9){
-            return redirect()->route('user.catalogue.index')->with('error', 'Đây là nhóm tác giả không thể xóa.');
         }
+
+        $this->authorize('modules', 'user.catalogue.destroy');
 
         return view('Backend.dashboard.layout', compact('template','config','userCatalogue'));
     }
@@ -127,7 +134,15 @@ class UserCatalogueController extends Controller
         }
            return redirect()->route('user.catalogue.index')->with('error','Xóa nhóm thành viên thất bại. Hãy thử lại');
     }
-    
+    public function permission(){
+        $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
+        $permissions = $this->permissionRepository->all();
+        $config=$this->configCUD();
+        $template='Backend.user.catalogue.permission';
+        $config['seo']=config('apps.permission.edit');
+        // $this->authorize('modules', 'user.catalogue.permission');
+        return view('Backend.dashboard.layout', compact('template','userCatalogues','permissions','config'));
+    }
     public function updatePermission(Request $request){
         if($this->userCatalogueService->setPermission($request)){
             return redirect()->route('user.catalogue.index')->with('success','Cập nhật quyền nhóm thành viên thành công');

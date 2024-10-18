@@ -42,6 +42,7 @@
             <!-- <h6 class="collapse-header">Custom Components:</h6> -->
             <a class="collapse-item" href="{{ route('user.catalogue.index') }}">QL Nhóm người dùng</a>
             <a class="collapse-item" href="{{ route('user.index') }}">QL Người dùng</a>
+            <a class="collapse-item" href="{{ route('permission.index') }}">QL Quyền</a>
         </div>
     </div>
 </li>
