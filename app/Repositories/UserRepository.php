@@ -40,8 +40,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             }
 
             if (isset($condition['user_catalogue_id'])) {
-                $query->where('tb2.user_catalogue_id', '=', $condition['user_catalogue_id'])
-                ->orWhere('users.user_catalogue_id', '=', $condition['user_catalogue_id']);
+                $query->where(function ($subQuery) use ($condition) {
+                    $subQuery->where('tb2.user_catalogue_id', '=', $condition['user_catalogue_id'])
+                             ->orWhere('users.user_catalogue_id', '=', $condition['user_catalogue_id']);
+                });
             }
         })->with('user_catalogues');
         if(isset($relations)&&!empty($relations)){
